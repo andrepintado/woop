@@ -1,0 +1,53 @@
+
+body {
+  font-family: Tahoma;
+}
+#track1
+{
+  margin-left: 0px;
+  padding: 5px;
+  width: 600px;
+  height: 40px;
+  background-color: #600000;
+}
+#track2
+{
+  margin-left: 0px;
+  margin-top: 0px;
+  width: 600px;
+  padding: 5px;
+  height: 40px;
+  background-color: #CC3333;
+}
+#playcursor
+{
+  width:2px;
+  height:110px;
+  margin-top:-5px;
+  margin-left:0px;
+  background:#00FF00;
+  position:absolute;
+  z-index:2;
+  /* Safari and Chrome: */
+  -webkit-animation:cursor;
+  -webkit-animation-duration:5s;
+  -webkit-animation-timing-function:linear;
+  -webkit-animation-play-state:paused;
+}
+@-webkit-keyframes cursor
+{
+  0%   {left:0px; top:0px;}
+  100% {left:600px; top:0px;}
+}
+#sample1 {
+    height: 38px;
+    width: 80px;   //////////////////////////////////////////////////////////////////////
+    font-size: 9px;
+    text-align: center;
+}
+#totalTracks {
+    margin-left: 200px;
+    width: 600px;
+    height: 50px;
+    position: relative;
+}
