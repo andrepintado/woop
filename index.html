@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>WOOP - Your loops in the web</title>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+<style>
+body {
+	font-family: Tahoma;
+}
+</style>
+<script type="text/javascript">
+// chronometer / stopwatch JS script - coursesweb.net
+
+// Here set the minutes, seconds, and tenths-of-second when you want the chronometer to stop
+// If all these values are set to 0, the chronometer not stop automatically
+var stmints = 0;
+var stseconds = 0;
+var stzecsec = 0;
+
+// the initial tenths-of-second, seconds, and minutes
+var zecsec = 0;
+var seconds = 0;
+var mints = 0;
+
+var startchron = 0;
+
+function chronometer() {
+  if(startchron == 1) {
+    zecsec += 1;       // set tenths of a second
+
+    // set seconds
+    if(zecsec > 9) {
+      zecsec = 0;
+      seconds += 1;
+    }
+
+    // set minutes
+    if(seconds > 59) {
+      seconds = 0;
+      mints += 1;
+    }
+
+    // adds data in #showtm
+    document.getElementById('showtm').innerHTML = mints+ ' : '+ seconds+ ' : '+ zecsec;
+
+    // if the chronometer reaches to the values for stop, calls whenChrStop(), else, auto-calls chronometer()
+    if(zecsec == stzecsec && seconds == stseconds && mints == stmints) stopChr();
+    else setTimeout("chronometer()", 100);
+  }
+}
+
+function startChr() { startchron = 1; chronometer(); }      // starts the chronometer
+function stopChr() { startchron = 0; }                      // stops the chronometer
+function resetChr() {
+  zecsec = 0;  seconds = 0; mints = 0; startchron = 0; 
+  document.getElementById('showtm').innerHTML = mints+ ' : '+ seconds+ '<sub>'+ zecsec+ '</sub>';
+}
+
+</script>
+<script>
+var elems = new Array();
+var nSamples = 1;
+var delay;
+var count;
+var length;
+
+function playLoop()
+{ 
+  delayTrack1Sample1 = document.getElementById("timeSample1").value*1000;
+  delayTrack2Sample1 = 0
+  delayTrack1Sample2 = 0
+
+  setTimeout(function() { elems[0].play()}, delayTrack1Sample1);
+  //setTimeout(function() { elems[1].play()}, delayTrack2Sample1);
+  //setTimeout(function() { elems[2].play()}, delayTrack1Sample2);
+}
+function stopLoop()
+{
+  elems[0].pause();
+  //elems[1].pause();
+  //elems[2].pause();
+}
+function loaded()
+{
+  elems[0] = document.getElementById("track1sample1");
+  //elems[1] = document.getElementById("track2sample100");
+  //elems[2] = document.getElementById("track1sample200");
+  nSamples=1;
+  count=nSamples+1;
+  length=getMaxDuration();
+}
+function clean()
+{
+  count=nSamples+1;
+}
+function startCursor()
+{
+  startChr();
+
+  document.getElementById("playcursor").style.webkitAnimationDuration = '10s'
+  document.getElementById("playcursor").style.webkitAnimationPlayState = "running"
+
+  setTimeout(stopChr, length*1000);
+}
+
+function stopCursor() {
+  document.getElementById("playcursor").style.webkitAnimationPlayState = "paused"
+}
+
+function getMaxDuration() {
+  var d=0
+  for (i=0; i<elems.length; i++)
+  {
+    if (elems[i].duration > d) d=elems[i].duration
+  }
+  
+console.log(elems[0].duration)
+
+  return d;
+}
+
+
+var nPreLoadedSamples=0;
+function preLoad()
+{
+  nPreLoadedSamples++;
+  if (nPreLoadedSamples==nSamples)
+  {
+    loaded();
+  }
+}
+
+</script>
+</head>
+<body>
+
+<h1>WOOP - Your loops on the web</h1>
+
+<audio id="track1sample1" onloadeddata="preLoad()">
+  <source src="track1sample1.mp3" type="audio/mpeg">
+</audio>
+<audio id="track1sample2" onloadeddata="preLoad()">
+  <source src="track1sample2.mp3" type="audio/mpeg">
+</audio><br>
+<audio id="track2sample1" onloadeddata="preLoad()">
+  <source src="track2sample1.mp3" type="audio/mpeg">
+</audio>
+<br>
+<button onclick="clean(); playLoop(); startCursor();">play</button>
+<button onclick="stopLoop(); stopCursor();">stop</button>
+<br>
+sample 1:
+position: <input type="text" id="positionSample1" size="8">
+time: <input type="text" id="timeSample1" size="8">
+track: <input type="text" id="trackSample1">
+<br><br>
+
+<style type="text/css">
+#track1
+{
+  margin-left: 0px;
+  padding: 5px;
+  width: 600px;
+  height: 40px;
+  background-color: #600000;
+}
+#track2
+{
+  margin-left: 0px;
+  margin-top: 0px;
+  width: 600px;
+  padding: 5px;
+  height: 40px;
+  background-color: #CC3333;
+}
+#playcursor
+{
+  width:2px;
+  height:110px;
+  margin-top:-5px;
+  margin-left:0px;
+  background:#00FF00;
+  position:absolute;
+  z-index:2;
+  /* Safari and Chrome: */
+  -webkit-animation:cursor;
+  -webkit-animation-duration:5s;
+  -webkit-animation-timing-function:linear;
+  -webkit-animation-play-state:paused;
+}
+@-webkit-keyframes cursor
+{
+  0%   {left:0px; top:0px;}
+  100% {left:600px; top:0px;}
+}
+#timeAxis {
+  width: 600px;
+  height: 1px;
+  margin-left:200px;
+  position: absolute;
+  background-color: gray;
+}
+#s1 {
+  margin-left:200px;
+  position: relative;
+  font-size: 8px;
+}
+#s5 {
+  margin-top: -10px;
+  margin-left:500px;
+  position: relative;
+  font-size: 8px;
+}
+</style>
+
+<div id="s1">1s</div><div id="s5">5s</div>
+<div id="timeAxis"></div><br>
+<div id='totalTracks'>
+
+  <div id="playcursor"></div>
+
+  <div id="track1">
+    <div id="sample1" class="ui-widget-content"><p>Sample1</p></div>
+  </div>
+  <div id="track2"></div>
+</div>
+
+<br><br><br><br><br>
+
+<div id="showtm" style="font-size:21px; font-weight:800">0 : 0 : 0</div>
+
+<br><br><br><br>
+
+<script>
+  $(function() {
+    $('#sample1').draggable({
+      containment: '#totalTracks',
+      grid: [ 10, 50 ], 
+      snapMode: "inner",
+      cursor: "pointer",
+      create:function(event, ui) {
+        $("input#positionSample1").val($(this).position().left);
+        $("input#timeSample1").val(($(this).position().left-5)/60);
+      },
+      stop: function(event, ui) {
+        $("input#positionSample1").val($(this).position().left);
+        $("input#timeSample1").val(($(this).position().left-5)/60);
+      }
+    });
+    $("#track1, #track2").droppable({
+      drop: function(event, ui) {
+        var draggableId = ui.draggable.attr("id");
+        var droppableId = $(this).attr("id");
+        $("input#trackSample1").val(droppableId);
+      }
+    });
+  });
+</script>
+
+<style type="text/css">
+  #sample1 {
+    height: 38px;
+    width: 80px;   //////////////////////////////////////////////////////////////////////
+    font-size: 9px;
+    text-align: center;
+  }
+  #totalTracks {
+    margin-left: 200px;
+    width: 600px;
+    height: 50px;
+    position: relative;
+  }
+</style>
+ 
+</body>
+</html>
