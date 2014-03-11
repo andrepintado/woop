@@ -19,36 +19,32 @@
 </audio>
 <audio id="track1sample2" onloadeddata="preLoad()">
   <source src="bass.mp3" type="audio/mpeg">
-</audio><br>
+</audio>
 <audio id="track2sample1" onloadeddata="preLoad()">
   <source src="guitar.mp3" type="audio/mpeg">
 </audio>
-<br>
 <button onclick="clean(); playLoop(); startCursor();">play</button>
 <button onclick="stopLoop(); stopCursor();">stop</button>
 <br>
-sample 1:
-position: <input type="text" id="positionSample1" size="8">
-time: <input type="text" id="timeSample1" size="8">
-track: <input type="text" id="trackSample1">
+<div id="showtm" style="font-size:21px; font-weight:800">0 : 0 : 0</div>
 <br><br>
 
-<div id="s1">1s</div><div id="s5">5s</div>
-<div id="timeAxis"></div><br>
 <div id='totalTracks'>
 
   <div id="playcursor"></div>
 
   <div id="track1">
-    <div id="sample1" class="ui-widget-content"><p>Sample1</p></div>
+    <div id="sample1" class="ui-widget-content">drums</div>
   </div>
   <div id="track2"></div>
 </div>
 
-<br><br><br><br><br>
-
-<div id="showtm" style="font-size:21px; font-weight:800">0 : 0 : 0</div>
-
+<br><br><br><br><br><br><br>
+DEBUG:<br>
+sample 1:
+position: <input type="text" id="positionSample1" size="8">
+time: <input type="text" id="timeSample1" size="8">
+track: <input type="text" id="trackSample1">
  
 </body>
 </html>
