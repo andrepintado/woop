@@ -38,9 +38,9 @@ function chronometer() {
   }
 }
 
-function startChr() { startchron = 1; chronometer(); }      // starts the chronometer
-function stopChr() { startchron = 0; }                      // stops the chronometer
-function resetChr() {
+function startChrono() { startchron = 1; chronometer(); }      // starts the chronometer
+function stopChrono() { startchron = 0; }                      // stops the chronometer
+function resetChrono() {
   zecsec = 0;  seconds = 0; mints = 0; startchron = 0; 
   document.getElementById('showtm').innerHTML = mints+ ' : '+ seconds+ '<sub>'+ zecsec+ '</sub>';
 }
