@@ -14,13 +14,13 @@
 
 <h1>WOOP - Your loops on the web</h1>
 
-<audio id="track1sample1" onloadeddata="preLoad()">
+<audio id="sampleFile1" onloadeddata="preLoad()">
   <source src="drums.mp3" type="audio/mpeg">
 </audio>
-<audio id="track1sample2" onloadeddata="preLoad()">
+<audio id="sampleFile2" onloadeddata="preLoad()">
   <source src="bass.mp3" type="audio/mpeg">
 </audio>
-<audio id="track2sample1" onloadeddata="preLoad()">
+<audio id="sampleFile3" onloadeddata="preLoad()">
   <source src="guitar.mp3" type="audio/mpeg">
 </audio>
 <button onclick="clean(); playLoop();">play</button>
@@ -32,19 +32,62 @@
 <div id='totalTracks'>
 
   <div id="playcursor"></div>
-
   <div id="track1">
     <div id="sample1" class="ui-widget-content">drums</div>
   </div>
-  <div id="track2"></div>
+  <div id="track2">
+    <div id="sample2" class="ui-widget-content">bass</div>
+  </div>
+  <div id="track3">
+  </div>
+
 </div>
 
-<br><br><br><br><br><br><br>
+<div style="margin-top:150px">
 DEBUG:<br>
-sample 1:
-position: <input type="text" id="positionSample1" size="8">
-time: <input type="text" id="timeSample1" size="8">
-track: <input type="text" id="trackSample1">
- 
+sample touched:
+position: <input type="text" id="positionSample" size="8">
+time: <input type="text" id="timeSample" size="8">
+track: <input type="text" id="trackSample">
+dropped: <input type="text" id="droppedSample">
+</div>
+
+<br><br><hr/>
+
+<h2>Sandbox area</h2>
+
+ <audio controls autoplay id="audiorec"></audio>
+
+  <input onclick="startRecording()" type="button" value="start recording" />
+    <input onclick="stopRecording()" type="button" value="stop recording and play" />
+
+    <script>
+      var onFail = function(e) {
+        console.log('Rejected!', e);
+      };
+
+      var onSuccess = function(s) {
+        stream = s;
+      }
+
+      window.URL = window.URL || window.webkitURL;
+      navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+      var stream;
+      var audio = document.getElementById('audiorec');
+
+      function startRecording() {
+        if (navigator.getUserMedia) {
+          navigator.getUserMedia({audio: true}, onSuccess, onFail);
+        } else {
+          console.log('navigator.getUserMedia not present');
+        }
+      }
+
+      function stopRecording() {
+        audio.src = window.URL.createObjectURL(stream);
+      }
+    </script>
+
 </body>
 </html>

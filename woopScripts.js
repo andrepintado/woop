@@ -12,13 +12,14 @@
 
 
 var elems = new Array();
-var nSamples = 1;
+var nSamples = 2;
 var delay;
 var count;
 var length;
 var pixelsPerSecond = 50
 
-var delayTrack1Sample1=0;
+var delaySample1=0;
+var delaySample2=0;
 
 //makes sure that every sample is preloaded before calling "loaded()"
 var nPreLoadedSamples=0;
@@ -33,12 +34,15 @@ function preLoad()
 
 function loaded()
 {
-  elems[0] = document.getElementById("track1sample1");
+  elems[0] = document.getElementById("sampleFile1");
   $("#sample1").width(elems[0].duration*pixelsPerSecond)
   $("#sample1").text('drums ('+elems[0].duration+'s)')
-  //elems[1] = document.getElementById("track2sample100");
-  //elems[2] = document.getElementById("track1sample200");
-  nSamples=1;
+
+  elems[1] = document.getElementById("sampleFile2");
+  $("#sample2").width(elems[1].duration*pixelsPerSecond)
+  $("#sample2").text('bass ('+elems[1].duration+'s)')
+
+  nSamples=2;
   count=nSamples+1;
   length=getMaxDuration();
 }
@@ -47,13 +51,8 @@ function loaded()
 //plays loop
 function playLoop()
 { 
-  delayTrack1Sample1 = document.getElementById("timeSample1").value*1000;
-  delayTrack2Sample1 = 0
-  delayTrack1Sample2 = 0
-
-  setTimeout(function() { elems[0].play()}, delayTrack1Sample1);
-  //setTimeout(function() { elems[1].play()}, delayTrack2Sample1);
-  //setTimeout(function() { elems[2].play()}, delayTrack1Sample2);
+  setTimeout(function() { elems[0].play()}, delaySample1);
+  setTimeout(function() { elems[1].play()}, delaySample2);
 
   startCursor();
 }
@@ -62,8 +61,7 @@ function playLoop()
 function stopLoop()
 {
   elems[0].pause();
-  //elems[1].pause();
-  //elems[2].pause();
+  elems[1].pause();
 
   stopCursor();
   stopChrono();
@@ -76,8 +74,8 @@ function refreshDelays() {
   // - if argument is single, then refresh delays only for that sample/track
   // - if argument is non, then refreshes all delays for all sample/tracks
 
-  delayTrack1Sample1 = document.getElementById("timeSample1").value*1000;
-
+  delaySample1 = document.getElementById("timeSample1").value*1000;
+  delaySample2 = document.getElementById("timeSample2").value*1000;
 }
 
 //cleans vars
@@ -94,8 +92,8 @@ function startCursor()
   document.getElementById("playcursor").style.webkitAnimationDuration = '15s'
   document.getElementById("playcursor").style.webkitAnimationPlayState = "running"
 
-  setTimeout(stopChrono, length*1000);
-  setTimeout(stopCursor, length*1000);
+  setTimeout(stopChrono, length);
+  setTimeout(stopCursor, length);
 }
 
 //stops cursor
@@ -108,45 +106,44 @@ function getMaxDuration() {
   var d=0
   for (i=0; i<elems.length; i++)
   {
-    if (elems[i].duration > d) d=elems[i].duration
+    if (elems[i].duration > d) d=elems[i].duration*1000
   }
-
-  console.log("get: "+d)
-
   return d;
 }
 //refresh max duration of loop
-function refreshMaxDuration() {
-  length=delayTrack1Sample1
+function refreshMaxDuration() { //this is not correct but works in some cases
+  length=Math.max(delaySample1,delaySample2)
   for (i=0; i<elems.length; i++)
   {
-    length+=elems[i].duration
+    length+=elems[i].duration*1000
   }
-
-  console.log("refresh: "+length)
-
 }
 
 //jquery draggable/droppable effects
 $(function() {
-    $('#sample1').draggable({
+    $('#sample1, #sample2').draggable({
       containment: '#totalTracks',
       grid: [ 10, 50 ], 
       snapMode: "inner",
       cursor: "pointer",
       drag:function(event, ui) {
-        $("input#positionSample1").val($(this).position().left);
-        $("input#timeSample1").val(($(this).position().left-5)/pixelsPerSecond);
+        $("input#positionSample").val($(this).position().left);
+        $("input#timeSample").val(($(this).position().left-5)/pixelsPerSecond);
+
+        var draggableId = $(this).attr("id");
+        if (draggableId == "sample1")
+          delaySample1 = $("input#timeSample").val()*1000;
+        if (draggableId == "sample2")
+          delaySample2 = $("input#timeSample").val()*1000;
+
       }
     });
-    $("#track1, #track2").droppable({
+    $("#track1, #track2, #track3").droppable({
       drop: function(event, ui) {
         var draggableId = ui.draggable.attr("id");
         var droppableId = $(this).attr("id");
-        $("input#trackSample1").val(droppableId);
-        
-        //this as to be put as function
-        delayTrack1Sample1 = document.getElementById("timeSample1").value*1000;
+        $("input#trackSample").val(droppableId);
+        $("input#droppedSample").val(draggableId);
 
         refreshMaxDuration(); //refreshes max duration of loop
       }
